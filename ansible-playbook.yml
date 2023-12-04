@@ -17,12 +17,8 @@
       apt:
         name:
           - curl
-          - software-properties-common
           - docker.io
-
-    - name: Log out of DockerHub
-      community.docker.docker_login:
-        state: absent
+          - net-tools
 
     - name: Log into DockerHub
       community.docker.docker_login:
@@ -30,3 +26,17 @@
         password: "{{ docker_password }}"
       become: true
       become_user: root
+
+    - name: Allow incoming connection on 443
+      ufw:
+        rule: allow
+        port: 443
+        proto: tcp
+
+    - name: Run Nginx Container
+      docker_container:
+        name: nginx-example-docker
+        image: nginx:latest
+        state: started
+        ports:
+          - "443:443"
