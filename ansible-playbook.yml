@@ -1,0 +1,32 @@
+---
+- name: Run Nginx container
+  hosts: servers
+  gather_facts: false
+  become: true
+  vars_prompt:
+    - name: docker_username
+      prompt: "Please enter docker loginusername"
+    - name: docker_password
+      prompt: "Please enter docker login password"
+  tasks:
+    - name: Update repos
+      apt:
+        update_cache: yes
+
+    - name: Install required packages
+      apt:
+        name:
+          - curl
+          - software-properties-common
+          - docker.io
+
+    - name: Log out of DockerHub
+      community.docker.docker_login:
+        state: absent
+
+    - name: Log into DockerHub
+      community.docker.docker_login:
+        username: "{{ docker_username }}"
+        password: "{{ docker_password }}"
+      become: true
+      become_user: root
