@@ -1,2 +1,3 @@
-# ansible-docker-deployment
-This repo contains ansible code to deploy a nginx container on ubuntu 22.04 server
+# This repository demonstrate how we can deploy a nginx container on ubuntu 22.04 with Ansible. 
+
+
